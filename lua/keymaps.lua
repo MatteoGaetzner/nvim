@@ -96,3 +96,7 @@ local config = {
 }
 
 tree.setup(config)
+
+-- Latex
+map("n", "<leader>lf", ":lua FormatLatex()<CR>", { desc = "format file using latexindent" })
+map({ "n", "x" }, "<leader>ll", ":VimtexCompile<cr>", { desc = "compile LaTeX document" })
