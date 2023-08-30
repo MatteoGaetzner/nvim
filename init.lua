@@ -34,7 +34,7 @@ local function file_exists(path)
 end
 
 -- Path to the custom Python 3 binary
-local custom_python3_path = vim.fn.expand("~/.conda/envs/neovim-python3/bin/pip3")
+local custom_python3_path = vim.fn.expand("~/.local/share/micromamba/envs/neovim-python3/bin/python3")
 
 -- Check if the custom Python 3 binary exists
 if file_exists(custom_python3_path) then
