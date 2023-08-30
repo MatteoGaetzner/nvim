@@ -33,21 +33,23 @@ local function file_exists(path)
 	end
 end
 
--- Path to the custom Python 3 binary
-local custom_python3_path = vim.fn.expand("~/.mambaforge/envs/neovim/bin/python3")
-
 -- Check if the custom Python 3 binary exists
-if file_exists(custom_python3_path) then
-	vim.g.python3_host_prog = custom_python3_path
-else
-	-- Emit a warning message
-	vim.api.nvim_out_write("Warning: Custom Python 3 binary not found. Falling back to system Python 3.\n")
-	-- Set to default system Python 3 binary
-	vim.g.python3_host_prog = "python3"
+local function error_msg_if_not_exist(fp, default, msg)
+	local out = default
+	if file_exists(fp) then
+		out = fp
+	else
+		vim.api.nvim_out_write(msg)
+	end
+	return out
 end
 
+LOCAL = require("local")
+
+vim.g.python3_host_prog = error_msg_if_not_exist(LOCAL.python3_host_prog, "python3",
+	"Warning: Custom Python 3 binary not found. Falling back to system Python 3.\n")
 -- NOTE: Set this path to the path to your perl executable!
-vim.g.perl_host_prog = "/usr/bin/perl"
+vim.g.perl_host_prog = error_msg_if_not_exist(LOCAL.perl_host_prog, "perl", "")
 
 -- Textwidth (following PEP 8)
 vim.opt.textwidth = 79
