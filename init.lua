@@ -15,7 +15,29 @@ vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = " "
 
 -- NOTE: Set this path to the path to your python3 executable!
-vim.g.python3_host_prog = vim.fn.expand("~/.local/share/micromamba/envs/neovim-python3/bin/python3")
+-- Function to check if a file exists
+local function file_exists(path)
+	local f = io.open(path, "r")
+	if f then
+		io.close(f)
+		return true
+	else
+		return false
+	end
+end
+
+-- Path to the custom Python 3 binary
+local custom_python3_path = vim.fn.expand("~/.local/share/micromamba/envs/neovim-python3/bin/python3")
+
+-- Check if the custom Python 3 binary exists
+if file_exists(custom_python3_path) then
+	vim.g.python3_host_prog = custom_python3_path
+else
+	-- Emit a warning message
+	vim.api.nvim_out_write("Warning: Custom Python 3 binary not found. Falling back to system Python 3.\n")
+	-- Set to default system Python 3 binary
+	vim.g.python3_host_prog = "python3"
+end
 
 -- NOTE: Set this path to the path to your perl executable!
 vim.g.perl_host_prog = "/usr/bin/perl"
