@@ -93,20 +93,8 @@ vim.api.nvim_create_autocmd({ "BufLeave", "FocusLost", "InsertEnter", "CmdlineEn
 	end,
 })
 
--- Everforest colorscheme
-require("everforest").load()
-
-
 -- Comment.nvim
 require('Comment').setup()
-
--- Harpoon
-vim.cmd('highlight! HarpoonInactive guibg=NONE guifg=#63698c')
-vim.cmd('highlight! HarpoonActive guibg=NONE guifg=white')
-vim.cmd('highlight! HarpoonNumberActive guibg=NONE guifg=#7aa2f7')
-vim.cmd('highlight! HarpoonNumberInactive guibg=NONE guifg=#7aa2f7')
-vim.cmd('highlight! TabLineFill guibg=NONE guifg=white')
-
 
 -- Mason and lspconfig (Mason must come first!)
 require("mason").setup()
@@ -152,7 +140,17 @@ lsp_defaults.capabilities = vim.tbl_deep_extend(
 )
 
 lspconfig.efm.setup(vim.tbl_extend('force', efmls_config, {}))
-lspconfig.pyright.setup {}
+lspconfig.pyright.setup({
+	settings = {
+	    python = {
+	      analysis = {
+		autoSearchPaths = true,
+		useLibraryCodeForTypes = true,
+		diagnosticMode = 'openFilesOnly',
+	      },
+	    },
+	  }
+})
 lspconfig.rust_analyzer.setup {}
 lspconfig.lua_ls.setup {
 	settings = {
@@ -170,11 +168,8 @@ require('luasnip.loaders.from_vscode').lazy_load()
 -- Cmp
 vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
 
-require('luasnip.loaders.from_vscode').lazy_load()
-
 local cmp = require('cmp')
 local luasnip = require('luasnip')
-
 local select_opts = { behavior = cmp.SelectBehavior.Select }
 
 ---@diagnostic disable-next-line
