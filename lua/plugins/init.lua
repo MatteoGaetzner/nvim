@@ -40,8 +40,6 @@ return {
 		version = 'v1.x.x', -- version is optional, but recommended
 		dependencies = { 'neovim/nvim-lspconfig' },
 	},
-	{ 'nvim-tree/nvim-tree.lua' },
-	{ 'nvim-tree/nvim-web-devicons' },
 	{
 		'nvim-telescope/telescope.nvim',
 		tag = '0.1.2',

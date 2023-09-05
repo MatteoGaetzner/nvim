@@ -21,6 +21,9 @@ vim.opt.termguicolors = true
 -- Keymaps
 vim.g.mapleader = " "
 
+-- Clipboard
+vim.opt.clipboard = "unnamedplus"
+
 -- NOTE: Set this path to the path to your python3 executable!
 -- Function to check if a file exists
 local function file_exists(path)
@@ -163,28 +166,6 @@ lspconfig.lua_ls.setup {
 
 -- Snippets
 require('luasnip.loaders.from_vscode').lazy_load()
-
--- nvim-tree
-local function my_on_attach(bufnr)
-	local api = require("nvim-tree.api")
-
-	local function opts(desc)
-		return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
-	end
-
-	-- default mappings
-	api.config.mappings.default_on_attach(bufnr)
-
-	-- custom mappings
-	vim.keymap.set('n', '<C-t>', api.tree.change_root_to_parent, opts('Up'))
-	vim.keymap.set('n', '?', api.tree.toggle_help, opts('Help'))
-end
-
--- pass to setup along with your other options
-require("nvim-tree").setup {
-	on_attach = my_on_attach,
-}
-
 
 -- Cmp
 vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }

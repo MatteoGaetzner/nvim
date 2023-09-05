@@ -1,13 +1,4 @@
-local function map(mode, lhs, rhs, opts)
-	local keys = require("lazy.core.handler").handlers.keys
-	---@cast keys LazyKeysHandler
-	-- do not create the keymap if a lazy keys handler exists
-	if not keys.active[keys.parse({ lhs, mode = mode }).id] then
-		opts = opts or {}
-		opts.silent = opts.silent ~= false
-		vim.keymap.set(mode, lhs, rhs, opts)
-	end
-end
+local map = require("helpers").map
 
 -- Moving lines
 map({ "n", "v" }, "<C-J>", ":move .+1<CR>==", { desc = "move line up" })
@@ -73,29 +64,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
 	end,
 })
 
--- NvimTree
-map('n', '<leader>e', ':NvimTreeFindFileToggle!<CR>', { noremap = true })
-local function on_attach(bufnr)
-	local api = require "nvim-tree.api"
-	local function opts(desc)
-		return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
-	end
-
-	-- default mappings
-	api.config.mappings.default_on_attach(bufnr)
-
-	-- custom mappings
-	map('n', 'l', api.node.open.edit, opts('Open'))
-	map('n', 't', api.node.open.tab, opts('Open as Tab'))
-end
-
-local tree = require("nvim-tree")
-
-local config = {
-	on_attach = on_attach,
-}
-
-tree.setup(config)
 
 -- Latex
 map("n", "<leader>lf", ":lua FormatLatex()<CR>", { desc = "format file using latexindent" })
