@@ -46,7 +46,6 @@ return {
 		dependencies = { 'nvim-lua/plenary.nvim' }
 	},
 	{ 'numToStr/Comment.nvim', lazy = false },
-	{ 'gbprod/cutlass.nvim' },
 	{
 		"neanias/everforest-nvim",
 		version = false,
