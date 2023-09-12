@@ -1,0 +1,15 @@
+marksman
+alex
+beautysh
+black
+cbfmt
+efm
+isort
+lua-language-server
+pyright
+rust-analyzer
+shellcheck
+shfmt
+yamlfmt
+yamllint
+prettier

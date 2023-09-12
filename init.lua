@@ -18,6 +18,10 @@ vim.g.loaded_netrwPlugin = 1
 -- set termguicolors to enable highlight groups
 vim.opt.termguicolors = true
 
+
+-- Don't highlight search results
+vim.opt.hlsearch = false
+
 -- Keymaps
 vim.g.mapleader = " "
 
@@ -103,6 +107,7 @@ require("mason-lspconfig").setup {
 }
 
 -- EFM
+
 --- Register linters and formatters per language
 local black = require('efmls-configs.formatters.black')
 local isort = require('efmls-configs.formatters.isort')
@@ -110,12 +115,18 @@ local shfmt = require('efmls-configs.formatters.shfmt')
 local shellcheck = require('efmls-configs.linters.shellcheck')
 local beautysh = require('efmls-configs.formatters.beautysh')
 local yamllint = require('efmls-configs.linters.yamllint')
+
+--- Markdown
+local alex = require('efmls-configs.linters.alex')
+local prettier = require('efmls-configs.formatters.prettier')
+
 local languages = {
 	python = { black, isort },
 	sh = { shfmt, shellcheck },
 	bash = { shfmt, shellcheck },
 	zsh = { beautysh },
-	yaml = { yamllint }
+	yaml = { yamllint },
+	markdown = { alex, prettier }
 }
 
 local efmls_config = {
@@ -152,6 +163,7 @@ lspconfig.pyright.setup({
 	  }
 })
 lspconfig.rust_analyzer.setup {}
+lspconfig.marksman.setup {}
 lspconfig.lua_ls.setup {
 	settings = {
 		Lua = {
