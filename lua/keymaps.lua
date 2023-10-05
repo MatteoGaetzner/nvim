@@ -1,5 +1,8 @@
 local map = require("helpers").map
 
+map("n", "gvv", ":tabe ~/.config/nvim/init.lua<CR>", { desc = "open neovim config" })
+map("n", "gvk", ":tabe ~/.config/nvim/lua/keymaps.lua<CR>", { desc = "open neovim config" })
+
 -- Moving lines
 map({ "n", "v" }, "<C-J>", ":move .+1<CR>==", { desc = "move line up" })
 map({ "n", "v" }, "<C-K>", ":move .-2<CR>==", { desc = "move line down" })
