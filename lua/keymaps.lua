@@ -3,8 +3,6 @@ local map = require("helpers").map
 -- Moving lines
 map({ "n", "v" }, "<C-J>", ":move .+1<CR>==", { desc = "move line up" })
 map({ "n", "v" }, "<C-K>", ":move .-2<CR>==", { desc = "move line down" })
-map("i", "<C-J>", "<Esc>:move .+1<CR>==gi", { desc = "move line up" })
-map("i", "<C-K>", "<Esc>:move .-2<CR>==gi", { desc = "move line down" })
 
 -- Close tab
 map({ "n", "v" }, "<leader>d", "<cmd>bd<cr>", { desc = "Close Tab" })
@@ -68,3 +66,23 @@ vim.api.nvim_create_autocmd('LspAttach', {
 -- Latex
 map("n", "<leader>lf", ":lua FormatLatex()<CR>", { desc = "format file using latexindent" })
 map({ "n", "x" }, "<leader>ll", ":VimtexCompile<cr>", { desc = "compile LaTeX document" })
+
+-- Luasnip
+local ls = require("luasnip")
+
+--
+map("n", "gs", ":lua require(\"luasnip.loaders\").edit_snippet_files()<cr>")
+
+-- "Do next thing with <c-j>"
+map({ "i", "s" }, "<c-j>", function()
+	if ls.expand_or_jumpable() then
+		ls.expand_or_jump()
+	end
+end, { silent = true })
+
+-- "Go back"
+map({ "i", "s" }, "<c-k>", function()
+	if ls.jumpable(-1) then
+		ls.jump(-1)
+	end
+end, { silent = true })

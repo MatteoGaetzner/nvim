@@ -18,7 +18,6 @@ vim.g.loaded_netrwPlugin = 1
 -- set termguicolors to enable highlight groups
 vim.opt.termguicolors = true
 
-
 -- Don't highlight search results
 vim.opt.hlsearch = false
 
@@ -103,7 +102,7 @@ require('Comment').setup()
 -- Mason and lspconfig (Mason must come first!)
 require("mason").setup()
 require("mason-lspconfig").setup {
-	ensure_installed = { "lua_ls", "rust_analyzer", "pyright", "efm" },
+	ensure_installed = { "lua_ls", "rust_analyzer", "pyright", "efm", "gopls", "texlab" },
 }
 
 -- EFM
@@ -115,6 +114,7 @@ local shfmt = require('efmls-configs.formatters.shfmt')
 local shellcheck = require('efmls-configs.linters.shellcheck')
 local beautysh = require('efmls-configs.formatters.beautysh')
 local yamllint = require('efmls-configs.linters.yamllint')
+local latexindent = require('efmls-configs.formatters.latexindent')
 
 --- Markdown
 local alex = require('efmls-configs.linters.alex')
@@ -126,7 +126,8 @@ local languages = {
 	bash = { shfmt, shellcheck },
 	zsh = { beautysh },
 	yaml = { yamllint },
-	markdown = { alex, prettier }
+	markdown = { alex, prettier },
+	tex = { latexindent }
 }
 
 local efmls_config = {
@@ -150,17 +151,19 @@ lsp_defaults.capabilities = vim.tbl_deep_extend(
 	require('cmp_nvim_lsp').default_capabilities()
 )
 
+lspconfig.texlab.setup({})
+lspconfig.gopls.setup({})
 lspconfig.efm.setup(vim.tbl_extend('force', efmls_config, {}))
 lspconfig.pyright.setup({
 	settings = {
-	    python = {
-	      analysis = {
-		autoSearchPaths = true,
-		useLibraryCodeForTypes = true,
-		diagnosticMode = 'openFilesOnly',
-	      },
-	    },
-	  }
+		python = {
+			analysis = {
+				autoSearchPaths = true,
+				useLibraryCodeForTypes = true,
+				diagnosticMode = 'openFilesOnly',
+			},
+		},
+	}
 })
 lspconfig.rust_analyzer.setup {}
 lspconfig.marksman.setup {}
@@ -175,20 +178,44 @@ lspconfig.lua_ls.setup {
 }
 
 -- Snippets
+local ls = require("luasnip")
+-- ls.setup({
+-- 	snip_env = {
+-- 		s = function(...)
+-- 			local snip = ls.s(...)
+-- 			-- we can't just access the global `ls_file_snippets`, since it will be
+-- 			-- resolved in the environment of the scope in which it was defined.
+-- 			table.insert(getfenv(2).ls_file_snippets, snip)
+-- 		end,
+-- 		parse = function(...)
+-- 			local snip = ls.parser.parse_snippet(...)
+-- 			table.insert(getfenv(2).ls_file_snippets, snip)
+-- 		end,
+-- 	},
+-- })
+
 require('luasnip.loaders.from_vscode').lazy_load()
+require("luasnip.loaders.from_lua").load({ paths = "~/.config/nvim/luasnip-snippets/" })
+require("luasnip.loaders.from_snipmate").lazy_load()
 
 -- Cmp
 vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
 
 local cmp = require('cmp')
-local luasnip = require('luasnip')
+
+ls.config.set_config({
+	history = true,                      -- Keep last snippet in memory, to be able to jump back into it, once outside the snippet completion process
+	updateevents = "TextChanged, TextChangedI", -- Make snippets update while typing
+	enable_autosnippets = true,
+})
+
 local select_opts = { behavior = cmp.SelectBehavior.Select }
 
 ---@diagnostic disable-next-line
 cmp.setup({
 	snippet = {
 		expand = function(args)
-			luasnip.lsp_expand(args.body)
+			ls.lsp_expand(args.body)
 		end
 	},
 	sources = {
@@ -227,21 +254,21 @@ cmp.setup({
 		['<C-u>'] = cmp.mapping.scroll_docs(-4),
 		['<C-d>'] = cmp.mapping.scroll_docs(4),
 
-		['<C-e>'] = cmp.mapping.abort(),
+		-- ['<C-e>'] = cmp.mapping.abort(),
 		['<C-l>'] = cmp.mapping.confirm({ select = true }),
 		['<CR>'] = cmp.mapping.confirm({ select = false }),
 
 		['<C-f>'] = cmp.mapping(function(fallback)
-			if luasnip.jumpable(1) then
-				luasnip.jump(1)
+			if ls.jumpable(1) then
+				ls.jump(1)
 			else
 				fallback()
 			end
 		end, { 'i', 's' }),
 
 		['<C-b>'] = cmp.mapping(function(fallback)
-			if luasnip.jumpable(-1) then
-				luasnip.jump(-1)
+			if ls.jumpable(-1) then
+				ls.jump(-1)
 			else
 				fallback()
 			end
