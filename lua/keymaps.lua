@@ -23,10 +23,9 @@ map({ "n", "v" }, "<leader>9", "9gt", { desc = "go to tab 9" })
 map({ "n", "v" }, "<leader>0", ":tablast<CR>")
 
 -- Cut movements
-map("n", "m", "d", { desc = "normal mode cut" })
-map("x", "m", "d", { desc = "visual mode cut" })
-map("n", "mm", "dd", { desc = "normal mode cut line" })
-map("n", "M", "D", { desc = "visual mode cut" })
+map({ "n", "x" }, "m", "d", { desc = "normal, visual: cut motion" })
+map("n", "mm", "dd", { desc = "normal: cut line" })
+map("n", "M", "D", { desc = "normal: cut trailing" })
 
 -- Telescope fuzzy finder
 local builtin = require('telescope.builtin')
@@ -41,28 +40,28 @@ map('n', ']d', vim.diagnostic.goto_next)
 
 -- LSP stuff
 vim.api.nvim_create_autocmd('LspAttach', {
-	group = vim.api.nvim_create_augroup('UserLspConfig', {}),
-	callback = function(ev)
-		-- Enable completion triggered by <c-x><c-o>
-		vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+    group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+    callback = function(ev)
+        -- Enable completion triggered by <c-x><c-o>
+        vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
-		-- Buffer local mappings.
-		-- See `:help vim.lsp.*` for documentation on any of the below functions
-		local opts = { buffer = ev.buf }
-		map('n', 'gD', vim.lsp.buf.declaration, opts)
-		map('n', 'gd', vim.lsp.buf.definition, opts)
-		map('n', 'K', vim.lsp.buf.hover, opts)
-		map('n', 'gi', vim.lsp.buf.implementation, opts)
-		map('n', '<space>wa', vim.lsp.buf.add_workspace_folder, opts)
-		map('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, opts)
-		map('n', '<space>wl', function()
-			print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-		end, opts)
-		map('n', '<space>D', vim.lsp.buf.type_definition, opts)
-		map('n', '<space>rn', vim.lsp.buf.rename, opts)
-		map({ 'n', 'v' }, '<space>ca', vim.lsp.buf.code_action, opts)
-		map('n', 'gr', vim.lsp.buf.references, opts)
-	end,
+        -- Buffer local mappings.
+        -- See `:help vim.lsp.*` for documentation on any of the below functions
+        local opts = { buffer = ev.buf }
+        map('n', 'gD', vim.lsp.buf.declaration, opts)
+        map('n', 'gd', vim.lsp.buf.definition, opts)
+        map('n', 'K', vim.lsp.buf.hover, opts)
+        map('n', 'gi', vim.lsp.buf.implementation, opts)
+        map('n', '<space>wa', vim.lsp.buf.add_workspace_folder, opts)
+        map('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, opts)
+        map('n', '<space>wl', function()
+            print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+        end, opts)
+        map('n', '<space>D', vim.lsp.buf.type_definition, opts)
+        map('n', '<space>rn', vim.lsp.buf.rename, opts)
+        map({ 'n', 'v' }, '<space>ca', vim.lsp.buf.code_action, opts)
+        map('n', 'gr', vim.lsp.buf.references, opts)
+    end,
 })
 
 
@@ -78,14 +77,14 @@ map("n", "gs", ":lua require(\"luasnip.loaders\").edit_snippet_files()<cr>")
 
 -- "Do next thing with <c-j>"
 map({ "i", "s" }, "<c-j>", function()
-	if ls.expand_or_jumpable() then
-		ls.expand_or_jump()
-	end
+    if ls.expand_or_jumpable() then
+        ls.expand_or_jump()
+    end
 end, { silent = true })
 
 -- "Go back"
 map({ "i", "s" }, "<c-k>", function()
-	if ls.jumpable(-1) then
-		ls.jump(-1)
-	end
+    if ls.jumpable(-1) then
+        ls.jump(-1)
+    end
 end, { silent = true })

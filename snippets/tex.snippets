@@ -163,40 +163,64 @@ snippet cha \chapter
 # Section
 snippet sec \section
 	\\section{${1:section name}}%
+	${0}
+snippet secl \section
+	\\section{${1:section name}}%
 	\\label{sec:${2:$1}}
 	${0}
 # Section without number
 snippet sec* \section*
+	\\section*{${1:section name}}%
+	${0}
+snippet secl* \section*
 	\\section*{${1:section name}}%
 	\\label{sec:${2:$1}}
 	${0}
 # Sub Section
 snippet sub \subsection
 	\\subsection{${1:subsection name}}%
+	${0}
+snippet subl \subsection
+	\\subsection{${1:subsection name}}%
 	\\label{sub:${2:$1}}
 	${0}
 # Sub Section without number
 snippet sub* \subsection*
+	\\subsection*{${1:subsection name}}%
+	${0}
+snippet subl* \subsection*
 	\\subsection*{${1:subsection name}}%
 	\\label{sub:${2:$1}}
 	${0}
 # Sub Sub Section
 snippet ssub \subsubsection
 	\\subsubsection{${1:subsubsection name}}%
+	${0}
+snippet ssubl \subsubsection
+	\\subsubsection{${1:subsubsection name}}%
 	\\label{ssub:${2:$1}}
 	${0}
 # Sub Sub Section without number
 snippet ssub* \subsubsection*
+	\\subsubsection*{${1:subsubsection name}}%
+	${0}
+snippet ssubl* \subsubsection*
 	\\subsubsection*{${1:subsubsection name}}%
 	\\label{ssub:${2:$1}}
 	${0}
 # Paragraph
 snippet par \paragraph
 	\\paragraph{${1:paragraph name}}%
+	${0}
+snippet parl \paragraph
+	\\paragraph{${1:paragraph name}}%
 	\\label{par:${2:$1}}
 	${0}
 # Sub Paragraph
 snippet subp \subparagraph
+	\\subparagraph{${1:subparagraph name}}%
+	${0}
+snippet subpl \subparagraph
 	\\subparagraph{${1:subparagraph name}}%
 	\\label{subp:${2:$1}}
 	${0}
@@ -435,3 +459,41 @@ snippet ra rightarrow
 # Long right arrow
 snippet lra longrightarrow
 	\\longrightarrow {$0}
+
+###############  CUSTOM SNIPPETS  ##############################################
+
+autosnippet \( "math environment"
+	\\($1\\)$0
+
+autosnippet \[ "big math environment"
+	\\[$1\\]$0
+
+snippet def "definition"
+	\\begin{definition}($1)
+	    $2
+	\\end{definition}
+
+snippet the "theorem"
+	\\begin{theorem}($1)
+	    $2
+	\\end{theorem}
+
+snippet prop "proposition"
+	\\begin{proposition}($1)
+	    $2
+	\\end{proposition}
+
+snippet lemma "lemma"
+	\\begin{lemma}($1)
+	    $2
+	\\end{lemma}
+
+snippet exa "example"
+	\\begin{example}($1)
+	    $2
+	\\end{example}
+
+snippet proof "proof"
+	\\begin{proof}
+	    $1
+	\\end{proof}
