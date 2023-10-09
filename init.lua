@@ -32,6 +32,7 @@ vim.opt.clipboard = "unnamedplus"
 
 -- Set tabstop, shiftwidth and use spaces instead of tabs
 vim.o.tabstop = 4
+vim.o.softtabstop = 4
 vim.o.shiftwidth = 4
 vim.o.expandtab = true
 
@@ -227,91 +228,70 @@ local select_opts = { behavior = cmp.SelectBehavior.Select }
 
 ---@diagnostic disable-next-line
 cmp.setup({
-    snippet = {
-        expand = function(args)
-            ls.lsp_expand(args.body)
-        end
-    },
-    sources = {
-        { name = 'path' },
-        { name = 'nvim_lsp', keyword_length = 1 },
-        { name = 'buffer',   keyword_length = 1 },
-        { name = 'luasnip',  keyword_length = 1 },
-    },
-    ---@diagnostic disable-next-line
-    window = {
-        documentation = cmp.config.window.bordered()
-    },
-    ---@diagnostic disable-next-line
-    formatting = {
-        fields = { 'menu', 'abbr', 'kind' },
-        format = function(entry, item)
-            local menu_icon = {
-                nvim_lsp = '⚙️',
-                luasnip = '⚡️',
-                buffer = '📄',
-                path = '📍',
-            }
+	preselect = cmp.PreselectMode.Item,
+	snippet = {
+		expand = function(args)
+			ls.lsp_expand(args.body)
+		end
+	},
+	sources = {
+		{ name = 'path' },
+		{ name = 'luasnip',  keyword_length = 1 },
+		{ name = 'nvim_lsp', keyword_length = 1 },
+		{ name = 'buffer',   keyword_length = 1 },
+	},
+	---@diagnostic disable-next-line
+	window = {
+		documentation = cmp.config.window.bordered()
+	},
+	---@diagnostic disable-next-line
+	formatting = {
+		fields = { 'menu', 'abbr', 'kind' },
+		format = function(entry, item)
+			local menu_icon = {
+				nvim_lsp = '⚙️',
+				luasnip = '⚡️',
+				buffer = '📄',
+				path = '📍',
+			}
 
-            item.menu = menu_icon[entry.source.name]
-            return item
-        end,
-    },
-    ---@diagnostic disable-next-line
-    mapping = {
-        ['<Up>'] = cmp.mapping.select_prev_item(select_opts),
-        ['<Down>'] = cmp.mapping.select_next_item(select_opts),
+			item.menu = menu_icon[entry.source.name]
+			return item
+		end,
+	},
+	---@diagnostic disable-next-line
+	mapping = {
+		['<C-p>'] = cmp.mapping.select_prev_item(select_opts),
+		['<C-n>'] = cmp.mapping.select_next_item(select_opts),
+		['<C-u>'] = cmp.mapping.scroll_docs(-4),
+		['<C-d>'] = cmp.mapping.scroll_docs(4),
+		['<C-c>'] = cmp.mapping.abort(),
+		['<CR>'] = cmp.mapping.confirm({
+			behavior = cmp.ConfirmBehavior.Insert,
+			select = true
+		}),
+		["<C-j>"] = cmp.mapping(function(fallback)
+			if ls.expand_or_jumpable() then
+				ls.expand_or_jump()
+			elseif cmp.visible() then
+				cmp.select_next_item()
+			elseif has_words_before() then
+				cmp.complete()
+			else
+				fallback()
+			end
+		end, { "i", "s" }),
 
-        ['<C-p>'] = cmp.mapping.select_prev_item(select_opts),
-        ['<C-n>'] = cmp.mapping.select_next_item(select_opts),
-
-        ['<C-u>'] = cmp.mapping.scroll_docs(-4),
-        ['<C-d>'] = cmp.mapping.scroll_docs(4),
-
-        -- ['<C-e>'] = cmp.mapping.abort(),
-        ['<C-l>'] = cmp.mapping.confirm({ select = true }),
-        ['<CR>'] = cmp.mapping.confirm({ select = false }),
-
-        ['<C-f>'] = cmp.mapping(function(fallback)
-            if ls.jumpable(1) then
-                ls.jump(1)
-            else
-                fallback()
-            end
-        end, { 'i', 's' }),
-
-        ['<C-b>'] = cmp.mapping(function(fallback)
-            if ls.jumpable(-1) then
-                ls.jump(-1)
-            else
-                fallback()
-            end
-        end, { 'i', 's' }),
-
-        ["<Tab>"] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-                cmp.select_next_item()
-                -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable()
-                -- they way you will only jump inside the snippet region
-            elseif luasnip.expand_or_jumpable() then
-                luasnip.expand_or_jump()
-            elseif has_words_before() then
-                cmp.complete()
-            else
-                fallback()
-            end
-        end, { "i", "s" }),
-
-        ["<S-Tab>"] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-                cmp.select_prev_item()
-            elseif luasnip.jumpable(-1) then
-                luasnip.jump(-1)
-            else
-                fallback()
-            end
-        end, { "i", "s" }),
-    },
+		["C-k>"] = cmp.mapping(function(fallback)
+			if cmp.visible() then
+				cmp.select_prev_item()
+			elseif ls.jumpable(-1) then
+				ls.jump(-1)
+			else
+				fallback()
+			end
+		end, { "i", "s" }),
+	},
 })
 
 -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
@@ -329,3 +309,17 @@ vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.format()]]
 
 -- Keymaps
 require("keymaps")
+
+-- Define a function to load the language-specific configuration
+function load_language_specific_config(filetype)
+	local filepath = 'language-specifics.' .. filetype
+	pcall(require, filepath) -- try require(...) catch noop
+end
+
+-- Set up an autocmd for FileType event
+vim.api.nvim_exec2([[
+  augroup LoadLanguageSpecificConfig
+    autocmd!
+    autocmd FileType * lua load_language_specific_config(vim.bo.filetype)
+  augroup END
+]], {})

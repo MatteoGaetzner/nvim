@@ -70,21 +70,4 @@ map("n", "<leader>lf", ":lua FormatLatex()<CR>", { desc = "format file using lat
 map({ "n", "x" }, "<leader>ll", ":VimtexCompile<cr>", { desc = "compile LaTeX document" })
 
 -- Luasnip
-local ls = require("luasnip")
-
---
 map("n", "gs", ":lua require(\"luasnip.loaders\").edit_snippet_files()<cr>")
-
--- "Do next thing with <c-j>"
-map({ "i", "s" }, "<c-j>", function()
-    if ls.expand_or_jumpable() then
-        ls.expand_or_jump()
-    end
-end, { silent = true })
-
--- "Go back"
-map({ "i", "s" }, "<c-k>", function()
-    if ls.jumpable(-1) then
-        ls.jump(-1)
-    end
-end, { silent = true })
