@@ -1,6 +1,9 @@
 return {
     "lervag/vimtex",
     init = function()
+        local backend = "pdflatex"
+        backend = "lualatex" -- uncomment this line to use lualatex
+
         -- Common settings
         vim.g.vimtex_compiler_latexmk = {
             out_dir = "build",
@@ -8,8 +11,7 @@ return {
             executable = "latexmk",
             options = {
                 "-pdf",
-                "-pdflatex='lualatex -synctex=1 -interaction=nonstopmode -file-line-error'",
-                -- "-pdflatex='pdflatex -synctex=1 -interaction=nonstopmode -file-line-error'",
+                "-pdflatex='" .. backend .. " -synctex=1 -interaction=nonstopmode -file-line-error'",
                 "-shell-escape",
                 "-outdir=build",
                 "-synctex=1",
