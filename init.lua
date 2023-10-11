@@ -219,7 +219,7 @@ end
 local cmp = require('cmp')
 
 ls.config.set_config({
-    history = true,                          -- Keep last snippet in memory, to be able to jump back into it, once outside the snippet completion process
+    history = true,                             -- Keep last snippet in memory, to be able to jump back into it, once outside the snippet completion process
     updateevents = "TextChanged, TextChangedI", -- Make snippets update while typing
     enable_autosnippets = true,
 })
@@ -228,70 +228,70 @@ local select_opts = { behavior = cmp.SelectBehavior.Select }
 
 ---@diagnostic disable-next-line
 cmp.setup({
-	preselect = cmp.PreselectMode.Item,
-	snippet = {
-		expand = function(args)
-			ls.lsp_expand(args.body)
-		end
-	},
-	sources = {
-		{ name = 'path' },
-		{ name = 'luasnip',  keyword_length = 1 },
-		{ name = 'nvim_lsp', keyword_length = 1 },
-		{ name = 'buffer',   keyword_length = 1 },
-	},
-	---@diagnostic disable-next-line
-	window = {
-		documentation = cmp.config.window.bordered()
-	},
-	---@diagnostic disable-next-line
-	formatting = {
-		fields = { 'menu', 'abbr', 'kind' },
-		format = function(entry, item)
-			local menu_icon = {
-				nvim_lsp = '⚙️',
-				luasnip = '⚡️',
-				buffer = '📄',
-				path = '📍',
-			}
+    preselect = cmp.PreselectMode.Item,
+    snippet = {
+        expand = function(args)
+            ls.lsp_expand(args.body)
+        end
+    },
+    sources = {
+        { name = 'path' },
+        { name = 'luasnip',  keyword_length = 1 },
+        { name = 'nvim_lsp', keyword_length = 1 },
+        { name = 'buffer',   keyword_length = 1 },
+    },
+    ---@diagnostic disable-next-line
+    window = {
+        documentation = cmp.config.window.bordered()
+    },
+    ---@diagnostic disable-next-line
+    formatting = {
+        fields = { 'menu', 'abbr', 'kind' },
+        format = function(entry, item)
+            local menu_icon = {
+                nvim_lsp = '⚙️',
+                luasnip = '⚡️',
+                buffer = '📄',
+                path = '📍',
+            }
 
-			item.menu = menu_icon[entry.source.name]
-			return item
-		end,
-	},
-	---@diagnostic disable-next-line
-	mapping = {
-		['<C-p>'] = cmp.mapping.select_prev_item(select_opts),
-		['<C-n>'] = cmp.mapping.select_next_item(select_opts),
-		['<C-u>'] = cmp.mapping.scroll_docs(-4),
-		['<C-d>'] = cmp.mapping.scroll_docs(4),
-		['<C-c>'] = cmp.mapping.abort(),
-		['<CR>'] = cmp.mapping.confirm({
-			behavior = cmp.ConfirmBehavior.Insert,
-			select = true
-		}),
-		["<C-j>"] = cmp.mapping(function(fallback)
-			if ls.expand_or_jumpable() then
-				ls.expand_or_jump()
-			elseif cmp.visible() then
-				cmp.select_next_item()
-			elseif has_words_before() then
-				cmp.complete()
-			else
-				fallback()
-			end
-		end, { "i", "s" }),
+            item.menu = menu_icon[entry.source.name]
+            return item
+        end,
+    },
+    ---@diagnostic disable-next-line
+    mapping = {
+        ['<C-p>'] = cmp.mapping.select_prev_item(select_opts),
+        ['<C-n>'] = cmp.mapping.select_next_item(select_opts),
+        ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-d>'] = cmp.mapping.scroll_docs(4),
+        ['<C-c>'] = cmp.mapping.abort(),
+        ['<CR>'] = cmp.mapping.confirm({
+            behavior = cmp.ConfirmBehavior.Insert,
+            select = true
+        }),
+        ["<C-j>"] = cmp.mapping(function(fallback)
+            if ls.expand_or_jumpable() then
+                ls.expand_or_jump()
+            elseif cmp.visible() then
+                cmp.select_next_item()
+            elseif has_words_before() then
+                cmp.complete()
+            else
+                fallback()
+            end
+        end, { "i", "s" }),
 
-		["C-k>"] = cmp.mapping(function(fallback)
-			if cmp.visible() then
-				cmp.select_prev_item()
-			elseif ls.jumpable(-1) then
-				ls.jump(-1)
-			else
-				fallback()
-			end
-		end, { "i", "s" }),
-	},
+        ["C-k>"] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+                cmp.select_prev_item()
+            elseif ls.jumpable(-1) then
+                ls.jump(-1)
+            else
+                fallback()
+            end
+        end, { "i", "s" }),
+    },
 })
 
 -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
@@ -312,8 +312,8 @@ require("keymaps")
 
 -- Define a function to load the language-specific configuration
 function load_language_specific_config(filetype)
-	local filepath = 'language-specifics.' .. filetype
-	pcall(require, filepath) -- try require(...) catch noop
+    local filepath = 'language-specifics.' .. filetype
+    pcall(require, filepath) -- try require(...) catch noop
 end
 
 -- Set up an autocmd for FileType event
