@@ -62,13 +62,13 @@ return {
                 ['<C-u>'] = cmp.mapping.scroll_docs(-4),
                 ['<C-d>'] = cmp.mapping.scroll_docs(4),
                 ['<C-c>'] = cmp.mapping.abort(),
-                ['<C-m>'] = cmp.mapping.confirm({
+                ['<C-y>'] = cmp.mapping.confirm({
                     behavior = cmp.ConfirmBehavior.Insert,
                     select = true
                 }),
                 ['<CR>'] = cmp.mapping(function(fallback)
                     fallback()
-                end),
+                end, { 'i', 's' }),
                 ['<C-j>'] = cmp.mapping(function(fallback)
                     if luasnip.expand_or_jumpable() then
                         luasnip.expand_or_jump()

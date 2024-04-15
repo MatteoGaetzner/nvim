@@ -179,7 +179,6 @@ lspconfig.pyright.setup({
         },
     }
 })
-lspconfig.rust_analyzer.setup {}
 lspconfig.marksman.setup {}
 lspconfig.lua_ls.setup {
     settings = {
@@ -191,6 +190,7 @@ lspconfig.lua_ls.setup {
     },
 }
 lspconfig.clangd.setup {}
+
 
 -- Format on save
 vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.format()]]
