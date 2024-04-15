@@ -2,6 +2,7 @@ alex
 beautysh
 black
 cbfmt
+codelldb
 efm
 gopls
 isort
