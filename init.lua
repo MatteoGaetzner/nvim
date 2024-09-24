@@ -189,7 +189,7 @@ lspconfig.lua_ls.setup {
         },
     },
 }
-lspconfig.clangd.setup {}
+lspconfig.clangd.setup { cmd = {"/Users/gaetzner/.local/share/esp-clang/bin/clangd"} }
 
 
 -- Format on save

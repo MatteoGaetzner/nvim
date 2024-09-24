@@ -29,9 +29,7 @@ map("n", "M", "D", { desc = "normal: cut trailing" })
 
 -- Telescope fuzzy finder
 local builtin = require('telescope.builtin')
-map('n', '<leader>fb', builtin.buffers, {})
-map('n', '<leader>ff', builtin.find_files, {})
-map('n', '<leader>fg', builtin.git_files, {})
+map('n', '<leader>f', builtin.find_files, {})
 map('n', '<leader>g', builtin.live_grep, {})
 
 -- Diagnostics
