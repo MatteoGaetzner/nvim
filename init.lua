@@ -189,7 +189,31 @@ lspconfig.lua_ls.setup {
         },
     },
 }
-lspconfig.clangd.setup { cmd = {"/Users/gaetzner/.local/share/esp-clang/bin/clangd"} }
+lspconfig.clangd.setup { cmd = { "/Users/gaetzner/.local/share/esp-clang/bin/clangd" } }
+
+lspconfig.rust_analyzer.setup({
+    on_attach = function(client, bufnr)
+        vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+    end,
+    settings = {
+        ["rust-analyzer"] = {
+            imports = {
+                granularity = {
+                    group = "module",
+                },
+                prefix = "self",
+            },
+            cargo = {
+                buildScripts = {
+                    enable = true,
+                },
+            },
+            procMacro = {
+                enable = true
+            },
+        }
+    }
+})
 
 
 -- Format on save
