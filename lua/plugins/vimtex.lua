@@ -2,7 +2,7 @@ return {
     "lervag/vimtex",
     init = function()
         local backend = "pdflatex"
-        -- backend = "lualatex" -- uncomment this line to use lualatex
+        backend = "lualatex" -- uncomment this line to use lualatex
 
         -- Common settings
         vim.g.vimtex_compiler_latexmk = {

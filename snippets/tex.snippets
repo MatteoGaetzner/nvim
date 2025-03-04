@@ -474,14 +474,17 @@ snippet lra longrightarrow
 ###############  CUSTOM SNIPPETS  ##############################################
 
 autosnippet (( "math environment"
-	\\($1\\)$0
+	\\( $1 \\)$0
 
 autosnippet [[ "big math environment"
-	\\[$1\\]$0
+	\\[
+	$1
+	\\]
+	\n$0
 
 snippet def "definition"
-	\\begin{definition}($1)
-	    $2
+	\\begin{definition}
+	    $1
 	\\end{definition}
 
 snippet cor "corollary"
@@ -490,28 +493,28 @@ snippet cor "corollary"
 	\\end{corollary}
 
 snippet the "theorem"
-	\\begin{theorem}($1)
-	    $2
+	\\begin{theorem}
+	    $1
 	\\end{theorem}
 
 snippet note "note"
 	\\begin{note}
-	    $2
+	    $1
 	\\end{note}
 
 snippet prop "proposition"
-	\\begin{proposition}($1)
-	    $2
+	\\begin{proposition}
+	    $1
 	\\end{proposition}
 
 snippet lemma "lemma"
-	\\begin{lemma}($1)
-	    $2
+	\\begin{lemma}
+	    $1
 	\\end{lemma}
 
 snippet exa "example"
-	\\begin{example}($1)
-	    $2
+	\\begin{example}
+	    $1
 	\\end{example}
 
 snippet proof "proof"
@@ -538,4 +541,4 @@ snippet intv "closed interval"
 autosnippet :: "colon"
 	\\colon
 autosnippet {{ "set"
-	\\set{$1}
+	\\set{ $1 }

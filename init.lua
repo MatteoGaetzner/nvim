@@ -114,7 +114,7 @@ require('Comment').setup()
 -- Mason and lspconfig (Mason must come first!)
 require("mason").setup()
 require("mason-lspconfig").setup {
-    ensure_installed = { "lua_ls", "rust_analyzer", "pyright", "efm", "gopls", "texlab" },
+    ensure_installed = { "lua_ls", "pyright", "efm", "gopls", "texlab" },
 }
 
 -- EFM
@@ -126,7 +126,7 @@ local shfmt = require('efmls-configs.formatters.shfmt')
 local shellcheck = require('efmls-configs.linters.shellcheck')
 local beautysh = require('efmls-configs.formatters.beautysh')
 local yamllint = require('efmls-configs.linters.yamllint')
-local latexindent = require('efmls-configs.formatters.latexindent')
+-- local latexindent = require('efmls-configs.formatters.latexindent')
 -- local clang_format = require('efmls-configs.formatters.clang_format')
 
 --- Markdown
@@ -140,7 +140,7 @@ local languages = {
     zsh = { beautysh },
     yaml = { yamllint },
     markdown = { alex, prettier },
-    tex = { latexindent },
+    -- tex = { tex-fmt },
     -- cpp = { clang_format }
 }
 
@@ -191,30 +191,30 @@ lspconfig.lua_ls.setup {
 }
 lspconfig.clangd.setup { cmd = { "/Users/gaetzner/.local/share/esp-clang/bin/clangd" } }
 
-lspconfig.rust_analyzer.setup({
-    on_attach = function(client, bufnr)
-        vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-    end,
-    settings = {
-        ["rust-analyzer"] = {
-            imports = {
-                granularity = {
-                    group = "module",
-                },
-                prefix = "self",
-            },
-            cargo = {
-                buildScripts = {
-                    enable = true,
-                },
-            },
-            procMacro = {
-                enable = true
-            },
-        }
-    }
-})
-
+-- lspconfig.rust_analyzer.setup({
+--     on_attach = function(client, bufnr)
+--         vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+--     end,
+--     settings = {
+--         ["rust-analyzer"] = {
+--             imports = {
+--                 granularity = {
+--                     group = "module",
+--                 },
+--                 prefix = "self",
+--             },
+--             cargo = {
+--                 buildScripts = {
+--                     enable = true,
+--                 },
+--             },
+--             procMacro = {
+--                 enable = true
+--             },
+--         }
+--     }
+-- })
+--
 
 -- Format on save
 vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.format()]]
